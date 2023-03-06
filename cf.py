@@ -58,6 +58,6 @@ class CFSpider:
                 start_time = str.strip(data[0].select('td:nth-child(3)')[0].text),
                 length = str.strip(data[0].select('td:nth-child(4)')[0].text),
             )
-            if new_append.countdown().days <= countdown_limit_hours // 24 and new_append.countdown().seconds // 3600 < countdown_limit_hours % 24:
+            if new_append.countdown().days * 24 + new_append.countdown().seconds // 3600 < countdown_limit_hours:
                 ret.append(new_append)
         return ret
