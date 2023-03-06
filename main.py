@@ -9,7 +9,7 @@ cqLog(logging.DEBUG)
 cqapi = cqHttpApi()
 
 def cf1(commandData, message: Message):
-    HOURS = 200
+    HOURS = 72
     cfs = CFSpider()
     contest_list = cfs.get_recent_contest(countdown_limit_hours=HOURS)
     if len(contest_list) == 0:
@@ -22,6 +22,21 @@ def cf1(commandData, message: Message):
         msg += f'- 时长：{c.length}\n'
         msg += f'- 倒计时：{c.countdown()}\n'
         message.reply(msg)
+
+def cf(commandData, message: Message):
+    HOURS = 72
+    cfs = CFSpider()
+    contest_list = cfs.get_recent_contest(5, countdown_limit_hours=HOURS)
+    if len(contest_list) == 0:
+        message.reply(f'近 {HOURS} 小时内无 Codeforces 竞赛')
+    else:
+        msg = ''
+        for c in contest_list:
+            msg += f'- 竞赛名：{c.name}\n'
+            msg += f'- 开始时间：{c.start_time}\n'
+            msg += f'- 时长：{c.length}\n'
+            msg += f'- 倒计时：{c.countdown()}\n\n'
+        message.reply(str.rstrip(msg))
 
 def cf_autofetch(from_id):
     HOURS = 80
@@ -45,6 +60,10 @@ bot = cqapi.create_bot(
 bot.command(cf1, "cf1", {
     "help": [
         "#cf1 - 获取最近一场 Codeforces 竞赛信息"
+    ]
+}).command(cf, "cf", {
+    "help": [
+        "#cf - 获取最近多场 Codeforces 竞赛信息"
     ]
 }).timing(cf_autofetch, "cf-autofetch", {
     "timeSleep": 28800
