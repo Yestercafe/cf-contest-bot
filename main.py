@@ -39,12 +39,12 @@ def cf(commandData, message: Message):
         message.reply(str.rstrip(msg))
 
 def cf_autofetch(from_id):
-    HOURS = 80
+    HOURS = 33
     cfs = CFSpider()
     contest_list = cfs.get_recent_contest(3, countdown_limit_hours=HOURS)
     print(f'got {contest_list}')
     if len(contest_list) > 0:
-        msg = '近期的（目前在测试 80 小时内的）Codeforces 竞赛提醒：'
+        msg = '近期的 Codeforces 竞赛提醒：'
         for c in contest_list:
             msg += f'\n- 竞赛名：{c.name}\n'
             msg += f'- 开始时间：{c.start_time}\n'
