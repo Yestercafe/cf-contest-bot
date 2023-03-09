@@ -78,6 +78,9 @@ f'''\
 '''
     message.reply(str.strip(msg))
 
+def include(command, message: Message):
+    message.reply('代码写得不错！')
+
 bot = cqapi.create_bot(
     group_id_list = secret_tokens.GROUP_ID_LIST,
     options = secret_tokens.OPTIONS,
@@ -101,6 +104,6 @@ bot.command(cf1, "cf1", {
     "help": [
         "#lc - 获取力扣 CN 每日一题"
     ]
-})
+}).command(include, "include")
 
 bot.start()
