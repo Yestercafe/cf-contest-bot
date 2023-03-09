@@ -4,6 +4,7 @@ import cf
 from pycqBot import Message
 from cf import CFSpider, CFContest
 import secret_tokens
+import ratings
 
 cqLog(logging.DEBUG)
 cqapi = cqHttpApi()
@@ -53,6 +54,18 @@ def cf_autofetch(from_id):
             msg += cf_contest_info_str(c)
         cqapi.send_group_msg(from_id, msg)
 
+def rat_cf(command, message: Message):
+    kvs = ratings.get_cf_ratings()
+    if len(kvs) == 0 and len(secret_tokens.RATING_LIST) == 0:
+        message.reply('rating list 为空')
+    elif len(kvs) == 0:
+        message.reply('爬虫炸了')
+    else:
+        msg = 'Codeforces Ratings:\n'
+        for name, rating in kvs:
+            msg += f'{name}: {rating}\n'
+        message.reply(msg)
+
 bot = cqapi.create_bot(
     group_id_list = secret_tokens.GROUP_ID_LIST,
     options = secret_tokens.OPTIONS,
@@ -68,6 +81,10 @@ bot.command(cf1, "cf1", {
     ]
 }).timing(cf_autofetch, "cf-autofetch", {
     "timeSleep": 28800
+}).command(rat_cf, "rat-cf", {
+    "help": [
+        "#rat-cf - 获取指定用户的 Codeforces contest rating"
+    ]
 })
 
 bot.start()

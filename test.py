@@ -1,4 +1,5 @@
 from cf import CFContest, CFSpider
+from ratings import get_cf_ratings
 
 cfs = CFSpider()
 HOURS = 200
