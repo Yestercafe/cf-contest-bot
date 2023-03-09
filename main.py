@@ -5,6 +5,7 @@ from pycqBot import Message
 from cf import CFSpider, CFContest
 import secret_tokens
 import ratings
+import leetcode
 
 cqLog(logging.DEBUG)
 cqapi = cqHttpApi()
@@ -66,6 +67,17 @@ def rat_cf(command, message: Message):
             msg += f'{name}: {rating}\n'
         message.reply(msg)
 
+def lc(command, message: Message):
+    lc_problem = leetcode.get_daily_url()
+    msg = \
+f'''\
+力扣 CN 每日一题：
+{lc_problem.no} - {lc_problem.title}
+难度：{lc_problem.level}
+链接：{lc_problem.url}
+'''
+    message.reply(str.strip(msg))
+
 bot = cqapi.create_bot(
     group_id_list = secret_tokens.GROUP_ID_LIST,
     options = secret_tokens.OPTIONS,
@@ -84,6 +96,10 @@ bot.command(cf1, "cf1", {
 }).command(rat_cf, "rat-cf", {
     "help": [
         "#rat-cf - 获取指定用户的 Codeforces contest rating"
+    ]
+}).command(lc, "lc", {
+    "help": [
+        "#lc - 获取力扣 CN 每日一题"
     ]
 })
 
