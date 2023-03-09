@@ -14,6 +14,9 @@ class CFContest:
         if int(length[1]) > 0:
             self.length += f'{int(length[1])}分钟'
         self.url = url
+    def err():
+        return CFContest(name='爬虫崩掉啦', start_time='Jul/7/2077 02:07', length='114:514', url='https://baidu.com')
+
     def __repr__(self):
         return f'{self.name} {self.start_time} {self.length} {self.url}'
     def __str__(self):
@@ -47,7 +50,7 @@ class CFSpider:
 
     def prepare(self):
         for i in range(self.retry_times):
-            with eventlet.Timeout(1):
+            with eventlet.Timeout(6):
                 if i != 0: print(f'Retry {i} times ...')
                 try:
                     self.html_raw = requests.get(self.url, timeout=10)
@@ -63,7 +66,7 @@ class CFSpider:
             return
 
     def get_recent_contest(self, amount: int = 1, countdown_limit_hours: int = 36) -> list[CFContest]:
-        if not self.is_fetched: return
+        if not self.is_fetched: return [CFContest.err()]
         self.html_soup = BeautifulSoup(self.html_raw.text, 'lxml')
         selectors = []
         ret = []
