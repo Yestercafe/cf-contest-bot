@@ -28,7 +28,7 @@ class CFContest:
         return diff
 
     def start_time_as_str(self) -> str:
-        return f'{self.start_time.month}月{self.start_time.day}号 {self.start_time.hour}:{self.start_time.minute}'
+        return f'{self.start_time.month}月{self.start_time.day}号 {self.start_time.hour:02d}:{self.start_time.minute:02d}'
 
     def countdown_as_str(self) -> str:
         diff = self.countdown()
@@ -36,7 +36,7 @@ class CFContest:
         ret = ''
         if days > 0:
             ret += f'{days}天'
-        if hours > 0 or days == 0:
+        if hours > 0:
             ret += f'{hours}小时'
         ret += f'{minutes}分钟'
         return ret

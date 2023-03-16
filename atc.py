@@ -42,7 +42,7 @@ class ATCContest:
         ret = ''
         if days > 0:
             ret += f'{days}天'
-        if hours > 0 or days == 0:
+        if hours > 0:
             ret += f'{hours}小时'
         ret += f'{minutes}分钟'
         return ret
