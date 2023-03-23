@@ -43,7 +43,7 @@ class CFContest:
 
 class CFSpider:
     def __init__(self, retry_times: int = 5):
-        self.url = r'https://codeforces.com/contests'
+        self.url = r'https://codeforces.com/contests?complete=true'
         self.retry_times = retry_times
         self.is_fetched = False
         self.prepare()
