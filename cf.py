@@ -7,7 +7,7 @@ import pytz
 class CFContest:
     def __init__(self, name: str, start_time: str, length: str, url: str):
         self.TIME_FORMAT = r'%b/%d/%Y %H:%M %z'
-        self.name = name
+        self.name = self.check_then_fix_name(name)
         self.start_time = datetime.datetime.strptime(start_time + ' +0300', self.TIME_FORMAT).astimezone(pytz.timezone('Asia/Shanghai'))
         length = length.split(':')
         self.length = f'{int(length[0])}小时'
@@ -22,16 +22,20 @@ class CFContest:
     def __str__(self):
         return f'{self.name} {self.start_time} {self.length} {self.url}'
 
-    def countdown(self) -> datetime.timedelta:
+    def countdown(self):
         curr_time = datetime.datetime.now()
         diff = self.start_time.astimezone(pytz.UTC) - curr_time.astimezone(pytz.UTC)
-        return diff
+        if self.start_time.astimezone(pytz.UTC) < curr_time.astimezone(pytz.UTC):
+            return (diff, True)
+        return (diff, False)
 
     def start_time_as_str(self) -> str:
         return f'{self.start_time.month}月{self.start_time.day}号 {self.start_time.hour:02d}:{self.start_time.minute:02d}'
 
     def countdown_as_str(self) -> str:
-        diff = self.countdown()
+        diff, is_running = self.countdown()
+        if is_running:
+            return '正在进行'
         days, hours, minutes = diff.days, diff.seconds % (24 * 60 * 60) // (60 * 60), diff.seconds % (60 * 60) // 60
         ret = ''
         if days > 0:
@@ -40,6 +44,11 @@ class CFContest:
             ret += f'{hours}小时'
         ret += f'{minutes}分钟'
         return ret
+
+    def check_then_fix_name(self, name: str) -> str:
+        if name.endswith('Enter »'):
+            name = name[:-8].strip()
+        return name
 
 class CFSpider:
     def __init__(self, retry_times: int = 5):
@@ -80,6 +89,7 @@ class CFSpider:
                 length = str.strip(data[0].select('td:nth-child(4)')[0].text),
                 url = 'https://codeforces.com/contests/' + str.strip(data[0].get_attribute_list('data-contestid')[0]),
             )
-            if new_append.countdown().days * 24 + new_append.countdown().seconds // 3600 < countdown_limit_hours:
+            cd, _ = new_append.countdown()
+            if cd.days * 24 + cd.seconds // 3600 < countdown_limit_hours:
                 ret.append(new_append)
         return ret

@@ -3,4 +3,4 @@ beautifulsoup4
 eventlet
 lxml
 pytz
-pycqBot
+pycqBot==0.4.5.1
