@@ -10,7 +10,10 @@ def get_cf_ratings() -> list[(str, int)]:
     vals = json.loads(raw_data.text)
     ret = []
     for user_info in vals['result']:
-        ret.append((user_info['handle'], int(user_info['rating'])))
-    ret.sort(key=lambda x: -x[1])
+        try:
+            ret.append((user_info['handle'], int(user_info['rating'])))
+        except KeyError:
+            ret.append((user_info['handle'], -1))
+    ret.sort(key=lambda x: (-x[1], x[0]))
     print(ret)
     return ret
