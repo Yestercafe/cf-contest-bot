@@ -45,7 +45,7 @@ OPTIONS = {
     ]
 }
 
-# rat-cf 指令会获取以下用户
+# cfr 指令会获取以下用户
 RATING_LIST = ['giangly', 'dourisd']
 ```
 

@@ -142,9 +142,9 @@ bot.command(cf1, "cf1", {
     ]
 }).timing(cf_autofetch, "cf-autofetch", {
     "timeSleep": 28800
-}).command(rat_cf, "rat-cf", {
+}).command(rat_cf, "cfr", {
     "help": [
-        "#rat-cf - 获取指定用户的 Codeforces contest rating"
+        "#cfr - 获取指定用户的 Codeforces contest rating"
     ]
 }).command(lc, "lc", {
     "help": [
