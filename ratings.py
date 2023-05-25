@@ -17,3 +17,9 @@ def get_cf_ratings() -> list[(str, int)]:
     ret.sort(key=lambda x: (-x[1], x[0]))
     print(ret)
     return ret
+
+def get_cf_ratings_raw() -> str:
+    API = 'https://codeforces.com/api/user.info?handles='
+    raw_data = requests.get(API + ';'.join(RATING_LIST))
+    return raw_data.text
+

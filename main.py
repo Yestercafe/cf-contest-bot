@@ -67,15 +67,44 @@ def cf_autofetch(from_id):
 
 def rat_cf(command, message: Message):
     kvs = ratings.get_cf_ratings()
-    if len(kvs) == 0 and len(secret_tokens.RATING_LIST) == 0:
+    if len(secret_tokens.RATING_LIST) == 0:
         message.reply('rating list 为空')
     elif len(kvs) == 0:
         message.reply('爬虫炸了')
     else:
-        msg = 'Codeforces Ratings:\n'
+        msg = 'Codeforces 竞赛分排名榜:\n'
         for name, rating in kvs:
-            msg += f'{name}: {rating}\n'
+            msg += f'{name} - '
+            rating = int(rating)
+            if rating < 0:
+                msg += 'unrated'
+            else:
+                level = 'newbie - 灰名'
+                if rating >= 1200:
+                    level = 'pupil - 绿名'
+                if rating >= 1400:
+                    level = 'specialist - 青名'
+                if rating >= 1600:
+                    level = 'expert - 蓝名'
+                if rating >= 1900:
+                    level = 'candidate master - 紫名'
+                if rating >= 2100:
+                    level = 'master - 浅橙名'
+                if rating >= 2300:
+                    level = 'international master - 深橙名'
+                if rating >= 2400:
+                    level = 'grandmaster - 浅红名'
+                if rating >= 2600:
+                    level = 'international grandmaster - 深红名'
+                if rating >= 3000:
+                    level = 'legendary master - 黑红名'
+                msg += f'{rating} - {level}'
+            msg += '\n'
         message.reply(msg)
+
+def rat_cf_raw(command, message: Message):
+    raw_text = ratings.get_cf_ratings_raw()
+    message.reply(raw_text)
 
 def lc(command, message: Message):
     lc_problem = leetcode.get_daily_url()
@@ -144,9 +173,11 @@ bot.command(cf1, "cf1", {
     "timeSleep": 28800
 }).command(rat_cf, "cfr", {
     "help": [
-        "#cfr - 获取指定用户的 Codeforces contest rating"
+        "#cfr - 获取 Codeforces 竞赛分排名榜"
     ]
-}).command(lc, "lc", {
+}).command(
+    rat_cf_raw, "cfr-raw"
+).command(lc, "lc", {
     "help": [
         "#lc - 获取力扣 CN 每日一题"
     ]
