@@ -14,7 +14,7 @@ def get_cf_ratings() -> list[(str, int)]:
             ret.append((user_info['handle'], int(user_info['rating'])))
         except KeyError:
             ret.append((user_info['handle'], -1))
-    ret.sort(key=lambda x: (-x[1], x[0]))
+    ret.sort(key=lambda x: (-x[1], x[0].lower()))
     print(ret)
     return ret
 
