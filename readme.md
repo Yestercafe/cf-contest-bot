@@ -1,5 +1,7 @@
 # cf-contest-bot
 
+*sbqq bot 总是风控或者在风控的路上，不维护了，转到新项目：[Yescafe/cf-summary](https://github.com/Yescafe/cf-summary)。*
+
 可以爬取 Codeforces 和 LeetCode 的一些信息的 QQ Bot。随手写的玩具，想到了什么有能力能加上的会加上，没能力加上的就没能力加上。
 
 ## 依赖
