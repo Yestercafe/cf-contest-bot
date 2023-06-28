@@ -61,6 +61,30 @@ def wrap_rat() -> str:
             msg += '\n'
         return msg
 
+def get_cf_rating_change() -> str:
+    lst = secret_tokens.RATING_LIST
+    res = []
+    for user in lst:
+        url = f'https://codeforces.com/api/user.rating?handle={user}'
+        raw_data = requests.get(url)
+        if raw_data.status_code != 200:
+            continue
+        vals = json.loads(raw_data.text)
+        last_record = vals['result'][-1] if vals['result'] and len(vals['result']) > 0 else None
+        if last_record:
+            res.append(last_record)
+    res.sort(key=lambda x : -int(x['contestId']))
+    last_contest, last_contest_name = res[0]['contestId'], res[0]['contestName']
+    last_contest_res = []
+    for r in res:
+        if r['contestId'] == last_contest:
+            last_contest_res.append((r['handle'], int(r['oldRating']), int(r['newRating'])))
+    last_contest_res.sort(key=lambda x: (x[1] - x[2], -x[2], x[0]))
+    ret = f'最近一次竞赛排名（{last_contest_name}）变化：\n'
+    for row in last_contest_res:
+        ret += f'{row[0]}: {row[1]} -> {row[2]} ({row[2] - row[1] if row[1] - row[2] > 0 else "+" + str(row[2] - row[1])})\n'
+    return ret.strip()
+
 if __name__ == '__main__':
-    print(wrap_rat())
+    print(get_cf_rating_change())
 

@@ -72,6 +72,10 @@ def rat_cf_raw(command, message: Message):
     raw_text = ratings.get_cf_ratings_raw()
     message.reply(raw_text)
 
+def cf_rating_change(command, message: Message):
+    msg = ratings.get_cf_rating_change()
+    message.reply(msg)
+
 def lc(command, message: Message):
     lc_problem = leetcode.get_daily_url()
     msg = \
@@ -137,6 +141,10 @@ bot.command(cf1, "cf1", {
 }).command(cf, "cf", {
     "help": [
         "#cf - 获取最近多场 Codeforces 竞赛信息"
+    ]
+}).command(cf_rating_change, "cfc", {
+    "help": [
+        "#cfc - 获取最近一场 Codeforces 竞赛 ratings 变化"
     ]
 }).timing(cf_autofetch, "cf-autofetch", {
     "timeSleep": 28800
