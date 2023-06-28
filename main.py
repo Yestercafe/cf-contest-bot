@@ -66,41 +66,7 @@ def cf_autofetch(from_id):
         cqapi.send_group_msg(from_id, msg)
 
 def rat_cf(command, message: Message):
-    kvs = ratings.get_cf_ratings()
-    if len(secret_tokens.RATING_LIST) == 0:
-        message.reply('rating list 为空')
-    elif len(kvs) == 0:
-        message.reply('爬虫炸了')
-    else:
-        msg = 'Codeforces 竞赛分排名榜:\n'
-        for name, rating in kvs:
-            msg += f'{name} - '
-            rating = int(rating)
-            if rating < 0:
-                msg += 'unrated'
-            else:
-                level = 'newbie - 灰名'
-                if rating >= 1200:
-                    level = 'pupil - 绿名'
-                if rating >= 1400:
-                    level = 'specialist - 青名'
-                if rating >= 1600:
-                    level = 'expert - 蓝名'
-                if rating >= 1900:
-                    level = 'candidate master - 紫名'
-                if rating >= 2100:
-                    level = 'master - 浅橙名'
-                if rating >= 2300:
-                    level = 'international master - 深橙名'
-                if rating >= 2400:
-                    level = 'grandmaster - 浅红名'
-                if rating >= 2600:
-                    level = 'international grandmaster - 深红名'
-                if rating >= 3000:
-                    level = 'legendary master - 黑红名'
-                msg += f'{rating} - {level}'
-            msg += '\n'
-        message.reply(msg)
+    message.reply(ratings.wrap_rat())
 
 def rat_cf_raw(command, message: Message):
     raw_text = ratings.get_cf_ratings_raw()
@@ -137,7 +103,7 @@ def atc1(commandData, message: Message):
     atcs = ATCSpider()
     contest_list = atcs.get_recent_contest(countdown_limit_hours=HOURS)
     if len(contest_list) == 0:
-        message.reply(f'近 {HOURS} 小时内无 Codeforces 竞赛')
+        message.reply(f'近 {HOURS} 小时内无 AtCoder 竞赛')
     else:
         c = contest_list[0]
         msg = atc_contest_info_str(c)
@@ -148,7 +114,7 @@ def atc(commandData, message: Message):
     atcs = ATCSpider()
     contest_list = atcs.get_recent_contest(5, countdown_limit_hours=HOURS)
     if len(contest_list) == 0:
-        message.reply(f'近 {HOURS} 小时内无 Codeforces 竞赛')
+        message.reply(f'近 {HOURS} 小时内无 AtCoder 竞赛')
     else:
         msg = ''
         for c in contest_list:
@@ -160,6 +126,9 @@ bot = cqapi.create_bot(
     group_id_list = secret_tokens.GROUP_ID_LIST,
     options = secret_tokens.OPTIONS,
 )
+
+def hello(commandData, message: Message):
+    message.reply('hello')
 
 bot.command(cf1, "cf1", {
     "help": [
@@ -192,6 +161,10 @@ bot.command(cf1, "cf1", {
 }).command(atc, "atc", {
     "help": [
         "#atc - 获取最近多场 AtCoder 竞赛信息"
+    ]
+}).command(hello, "hello", {
+    "help": [
+        "#hello - 测试用指令"
     ]
 })
 
