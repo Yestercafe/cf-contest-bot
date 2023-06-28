@@ -134,6 +134,10 @@ bot = cqapi.create_bot(
 def hello(commandData, message: Message):
     message.reply('hello')
 
+def calc(command_data, message: Message):
+    expr = ' '.join(command_data)
+    message.reply('=> ' + str(eval(expr)))
+
 bot.command(cf1, "cf1", {
     "help": [
         "#cf1 - 获取最近一场 Codeforces 竞赛信息"
@@ -173,6 +177,10 @@ bot.command(cf1, "cf1", {
 }).command(hello, "hello", {
     "help": [
         "#hello - 测试用指令"
+    ]
+}).command(calc, "cal", {
+    "cal": [
+        "#cal - 计算器"
     ]
 })
 
