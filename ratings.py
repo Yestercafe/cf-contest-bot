@@ -19,6 +19,11 @@ def get_cf_ratings() -> list[(str, int)]:
     print(ret)
     return ret
 
+def get_cf_ratings_raw_someone(handle: str) -> str:
+    API = f'https://codeforces.com/api/user.info?handles={handle}'
+    raw_data = requests.get(API)
+    return raw_data.text
+
 def get_cf_ratings_raw() -> str:
     API = 'https://codeforces.com/api/user.info?handles='
     raw_data = requests.get(API + ';'.join(RATING_LIST))
